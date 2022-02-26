@@ -1,4 +1,4 @@
-const TILE_SIZE = 32;
+const TILE_SIZE = 64;
 const MAP_NUM_ROWS = 11;
 const MAP_NUM_COLS = 15;
 
@@ -326,7 +326,7 @@ function setFOV(angle) {
 function setup() {
   var myCanvas = createCanvas(WINDOW_WIDTH*2, WINDOW_HEIGHT);
   myCanvas.parent("gameWindow")
-  bg = loadImage('image.jpg');
+  //bg = loadImage('image.jpg');
   mouse = mouseX;
 
 }
@@ -340,7 +340,6 @@ function update() {
 
 function draw() {
   update();
-  image(bg,WINDOW_WIDTH,0, width, height);
   grid.render();
   castAllRays();
 
@@ -373,7 +372,9 @@ function draw() {
   }
 }
 
+window.addEventListener("keydown", function(e) {
+  if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+      e.preventDefault();
+  }
+}, false);
 
-
-// TODO:  consider looking at this page if adding sprites in the future:
-// https://github.com/ssloy/tinyraycaster/wiki/Part-3:-populating-the-world
