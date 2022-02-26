@@ -1,4 +1,4 @@
-const TILE_SIZE = 64;
+const TILE_SIZE = 48;
 const MAP_NUM_ROWS = 11;
 const MAP_NUM_COLS = 15;
 
@@ -66,12 +66,12 @@ class Player {
   update() {
     this.rotationAngle += this.turnDirection * this.rotationSpeed;
 
-    // if (!grid.hasWallAt(this.x, this.y)) {
+     //if (!grid.hasWallAt(this.x, this.y)) {
       // only do that if the player is not colliding
       let moveStep = this.walkDirection * this.moveSpeed;
       this.x += Math.cos(this.rotationAngle) * moveStep;
       this.y += Math.sin(this.rotationAngle) * moveStep;
-    // }
+     //}
 
     // reseting angle
     if (this.rotationAngle < 0)
@@ -325,7 +325,7 @@ function setFOV(angle) {
 
 function setup() {
   var myCanvas = createCanvas(WINDOW_WIDTH*2, WINDOW_HEIGHT);
-  myCanvas.parent("gameWindow")
+  //myCanvas.parent("gameWindow")
   //bg = loadImage('image.jpg');
   mouse = mouseX;
 
