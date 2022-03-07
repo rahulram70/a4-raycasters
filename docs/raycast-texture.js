@@ -337,8 +337,9 @@ const raycast_textures = ( sketch ) => {
   let buffer = [];
   let texture = [];
   let d = sketch.pixelDensity();
+  let img;
   sketch.preload = () => {
-    tex = sketch.loadImage("https://raw.githubusercontent.com/daviskauffmann/raycaster/master/assets/images/eagle.png");
+    img = sketch.loadImage("texture.png");
   }
   //let slider2;
   sketch.setup = () => {
@@ -492,6 +493,22 @@ const raycast_textures = ( sketch ) => {
       //sketch.stroke(172);
       sketch.rect((i*4) + WINDOW_WIDTH, (drawEnd), 0, WINDOW_HEIGHT);
       sketch.strokeWeight(2);
+      var hit =  rays[i].wallHitX / TILE_SIZE;
+      sampleX = Math.abs(hit - Math.floor(hit));
+      /*sketch.imageMode(sketch.CENTER);
+      //sketch.image(img, (i + 0.5) * 4, drawStart, 4, drawEnd - drawStart, WINDOW_HEIGHT / rays[i].distance, 
+      //Math.floor(sampleX * img.width), 0, 1, img.height);
+      sketch.image(img, 
+                   start, 
+                   drawStart,
+                   4, 
+                   drawEnd - drawStart,
+                  i,
+                  0, 
+                  1, 
+                  img.height);*/
+      /*sketch.image(img, x, drawStart, 10, drawEnd - drawStart,
+          i + x - start, 0, 10, 256);*/
       for (var x = start; x < end; x++) {
         /*for (var y = 0; y < lineHeight; y++) {
           
@@ -511,12 +528,28 @@ const raycast_textures = ( sketch ) => {
           
         }*/
         
-        if (x % 2 == 0) {
+        if (i % 2 == 0) {
           sketch.stroke(255, 0 ,0);
         } else {
-          sketch.stroke(0, 255 ,0);
+          sketch.stroke(255, 255 , 255);
         }
         sketch.line(x, drawStart, x, drawEnd);
+        /*sketch.image(img, (i + 0.5) * 4 + WINDOW_WIDTH, drawStart, 4, drawEnd - drawStart, WINDOW_HEIGHT / rays[i].distance, 
+        Math.floor(sampleX * img.width), 0, 1, img.height);*/
+        /*sketch.image(img, x, drawStart, 1, drawEnd - drawStart,
+          i + x - start, 0, img.width / NUM_RAYS, img.height);*/
+
+        /*if (i % 2 == 0) {
+          sketch.stroke(255, 255, 255);
+          sketch.line(x, drawStart, x, drawEnd / 2 - 1);
+          sketch.stroke(0, 0, 0);
+          sketch.line(x, drawEnd / 2, x, drawEnd);
+        } else {
+          sketch.stroke(0, 0, 0);
+          sketch.line(x, drawStart, x, drawEnd / 2 - 1);
+          sketch.stroke(255, 255, 255);
+          sketch.line(x, drawEnd / 2, x, drawEnd);
+        }*/
         
       }
       //sketch.stroke(0);
