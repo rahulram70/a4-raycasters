@@ -478,13 +478,21 @@ const raycast_textures = ( sketch ) => {
       if (sampleX < 0.001 || sampleX > 0.999) {
         sampleX = Math.abs(hitY - Math.floor(hitY));
       }
+      //sketch.tint(rays[i].color);
       for (var x = start; x < end; x++) {
         var sx = i;
         if (sx > img.width) {
           sx -= img.width
         }
+        //sketch.tint(rays[i].color);
         sketch.image(img, x, drawStart-TILE_SIZE, 1, drawEnd - drawStart + TILE_SIZE,
           Math.floor(sampleX * img.width), 0, img.width / NUM_RAYS, img.height);
+        if (rays[i].color == 160) {
+          
+          sketch.stroke(0, 0, 0, 50);
+          sketch.fill(0, 0, 0, 50);
+          sketch.rect(x, drawStart-TILE_SIZE, 1, drawEnd - drawStart + TILE_SIZE);
+        }
       }
     }
   }
