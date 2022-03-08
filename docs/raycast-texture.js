@@ -493,8 +493,12 @@ const raycast_textures = ( sketch ) => {
       //sketch.stroke(172);
       sketch.rect((i*4) + WINDOW_WIDTH, (drawEnd), 0, WINDOW_HEIGHT);
       sketch.strokeWeight(2);
-      var hit =  rays[i].wallHitX / TILE_SIZE;
-      sampleX = Math.abs(hit - Math.floor(hit));
+      var hitX =  rays[i].wallHitX / TILE_SIZE;
+      var hitY =  rays[i].wallHitY / TILE_SIZE;
+      sampleX = Math.abs(hitX - Math.floor(hitX));
+      if (sampleX < 0.001 || sampleX > 0.999) {
+        sampleX = Math.abs(hitY - Math.floor(hitY));
+    }
       /*sketch.imageMode(sketch.CENTER);
       //sketch.image(img, (i + 0.5) * 4, drawStart, 4, drawEnd - drawStart, WINDOW_HEIGHT / rays[i].distance, 
       //Math.floor(sampleX * img.width), 0, 1, img.height);
