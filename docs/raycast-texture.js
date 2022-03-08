@@ -72,12 +72,12 @@ const raycast_textures = ( sketch ) => {
     update() {
       this.rotationAngle += this.turnDirection * this.rotationSpeed;
 
-      //if (!grid.hasWallAt(this.x, this.y)) {
+      if (!isColliding()) {
         // only do that if the player is not colliding
         let moveStep = this.walkDirection * this.moveSpeed;
         this.x += Math.cos(this.rotationAngle) * moveStep;
         this.y += Math.sin(this.rotationAngle) * moveStep;
-      //}
+      }
 
       // reseting angle
       if (this.rotationAngle < 0)
@@ -333,6 +333,22 @@ const raycast_textures = ( sketch ) => {
     FOV = angle * (Math.PI/180);
   }
 
+  function isColliding() {
+    console.log(grid.grid);
+    var posX = player.x;
+    var posY = player.y;
+
+    //if (!grid.hasWallAt(this.x, this.y)) {
+    // only do that if the player is not colliding
+    let moveStep = player.walkDirection * player.moveSpeed;
+    posX += Math.cos(player.rotationAngle) * moveStep;
+    posY += Math.sin(player.rotationAngle) * moveStep;
+    //}
+    //console.log(posX);
+    //console.log(posY);
+    return grid.hasWallAt(posX, posY);
+  }
+
   let tex;
   let buffer = [];
   let texture = [];
@@ -379,7 +395,6 @@ const raycast_textures = ( sketch ) => {
 
   function update() {
     player.update();
-
   }
 
 
