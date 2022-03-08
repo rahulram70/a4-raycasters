@@ -9,11 +9,11 @@ const raycast_textures = ( sketch ) => {
   const RAYWIDTH = Math.ceil((WINDOW_HEIGHT / WINDOW_WIDTH) * (WINDOW_WIDTH / 300));
   const TEX_WIDTH = 64;
   const TEX_HEIGHT = 64;
-  console.log("raywidth: " + RAYWIDTH);
+  //console.log("raywidth: " + RAYWIDTH);
 
 
-  console.log(WINDOW_WIDTH);
-  console.log(WINDOW_HEIGHT);
+  //console.log(WINDOW_WIDTH);
+  //console.log(WINDOW_HEIGHT);
 
   var FOV = 60 * (Math.PI / 180);
 
@@ -334,7 +334,7 @@ const raycast_textures = ( sketch ) => {
   }
 
   function isColliding() {
-    console.log(grid.grid);
+    //console.log(grid.grid);
     var posX = player.x;
     var posY = player.y;
 
@@ -349,13 +349,23 @@ const raycast_textures = ( sketch ) => {
     return grid.hasWallAt(posX, posY);
   }
 
+  function goodLoad() {
+    console.log("Successfully loaded the image");
+  }
+
+  function badLoad() {
+    console.log("Failed to load the image");
+  }
+
   let tex;
   let buffer = [];
   let texture = [];
   let d = sketch.pixelDensity();
   let img;
+  let bg;
   sketch.preload = () => {
     img = sketch.loadImage("texture.png");
+    bg = sketch.loadImage("image.jpg", goodLoad, badLoad);
   }
   //let slider2;
   sketch.setup = () => {
@@ -387,7 +397,7 @@ const raycast_textures = ( sketch ) => {
         
       }
     }
-    console.log("buff len: " + buffer.length);
+    //console.log("buff len: " + buffer.length);
     //sketch.loadPixels();
     
 
@@ -401,10 +411,8 @@ const raycast_textures = ( sketch ) => {
 
 
   sketch.draw = () => {
-    //clear();
     update();
-    //sketch.image(tex,WINDOW_WIDTH,0, sketch.width, sketch.height);
-    //sketch.loadPixels();
+    sketch.background(bg);
     grid.render();
     castAllRays(NUM_RAYS);
 
@@ -413,16 +421,6 @@ const raycast_textures = ( sketch ) => {
     }
     player.render();
 
-    //console.log("num rays: " + NUM_RAYS);
-    /*for (var x = WINDOW_WIDTH; x < 2*WINDOW_WIDTH; x++) {
-      for (var y = 0; y < WINDOW_HEIGHT; y++) {
-        //pixelColor.setRed(red);
-        //pixelColor.setGreen(green);
-        //pixelColor.setBlue(blue);
-        let colorVal = sketch.color(0);
-        sketch.set(x, y, colorVal);
-      }
-    }*/
     for (var i = 0; i < NUM_RAYS; i++) {
       var lineHeight = 32*(WINDOW_HEIGHT) / rays[i].distance;
 
@@ -445,23 +443,9 @@ const raycast_textures = ( sketch ) => {
         sampleX = Math.abs(rays[i].wallHitY - Math.floor(rays[i].wallHitY));
       }
 
-      //sketch.imageMode(sketch.CENTER);
-      //sketch.image(tex, (i+0.5) * RAYWIDTH + WINDOW_WIDTH, drawStart+133, RAYWIDTH, WINDOW_HEIGHT, i,
-      //sketch.int(sampleX * tex.width), 0, 1, tex.height);
-      //sketch.image(tex, 0, 0, 1, WINDOW_HEIGHT);
-      //sketch.pixelDensity(1);
-      //sketch.loadPixels();
-      //sketch.updatePixels();
-      //sketch.image(tex, i + WINDOW_WIDTH, (drawStart-TILE_SIZE), RAYWIDTH, drawStart-drawEnd, i,
-      //sketch.int(sampleX * tex.width), 0, 1, tex.height);
-      
-      // i*4 + WINDOW_WIDTH
-      //console.log("player x: " + player.x / TILE_SIZE + " player y: " + player.y / TILE_SIZE + "player dist: " + rays[i].distance / TILE_SIZE
-      //+ " player angle: " + player.rotationAngle);
       var wallX;
       var rayDirX = Math.cos(rays[i].rayAngle);
       var rayDirY = Math.sin(rays[i].rayAngle);
-      //lineHeight = Math.floor(WINDOW_HEIGHT / (rays[i].distance / TILE_SIZE));
       var step = 1.0 * TEX_HEIGHT / lineHeight;
       var texPos = (drawStart - Math.floor(WINDOW_HEIGHT / 2) + Math.floor(lineHeight / 2)) * step;
 
@@ -476,142 +460,33 @@ const raycast_textures = ( sketch ) => {
         texX = TEX_WIDTH - texX - 1;
       if (player.side == 1 && rayDirY < 0)
         texX = TEX_WIDTH - texX - 1;
-      
-        
-      /*for (var y = drawStart; y < drawEnd; y++) {
-        var texY = Math.floor(texPos) & (TEX_HEIGHT - 1);
-        texPos += step;
-        var color = texture[TEX_HEIGHT * texY + texX];
-        if (player.side == 1)
-          color = (color >> 1) & 8355711;
-        buffer[y][Math.floor(rays[i].wallHitX)] = color;
-        
-      }*/
-      // Loop through the x values for the ray
-        // Loop through the y values from 0 to lineHeight
-          // Get texY
-          // Add step to texPos
-          // Get color from texture
-          // Set the pixel using p5
+
       var start = WINDOW_WIDTH + i*4;
       
       var end = start + 4;
       var red;
       var green;
       var blue;
-      
-      //var pixelColor = new p5.Color()
+    
       sketch.stroke(0);
       sketch.rect((i*4) + WINDOW_WIDTH, (drawStart-TILE_SIZE), 0, (drawEnd-drawStart)+TILE_SIZE);
       sketch.stroke(0);
-      sketch.rect((i*4) + WINDOW_WIDTH, 0, 0, (drawStart));
-      //sketch.stroke(172);
-      sketch.rect((i*4) + WINDOW_WIDTH, (drawEnd), 0, WINDOW_HEIGHT);
       sketch.strokeWeight(2);
       var hitX =  rays[i].wallHitX / TILE_SIZE;
       var hitY =  rays[i].wallHitY / TILE_SIZE;
       sampleX = Math.abs(hitX - Math.floor(hitX));
       if (sampleX < 0.001 || sampleX > 0.999) {
         sampleX = Math.abs(hitY - Math.floor(hitY));
-    }
-      /*sketch.imageMode(sketch.CENTER);
-      //sketch.image(img, (i + 0.5) * 4, drawStart, 4, drawEnd - drawStart, WINDOW_HEIGHT / rays[i].distance, 
-      //Math.floor(sampleX * img.width), 0, 1, img.height);
-      sketch.image(img, 
-                   start, 
-                   drawStart,
-                   4, 
-                   drawEnd - drawStart,
-                  i,
-                  0, 
-                  1, 
-                  img.height);*/
-      /*sketch.image(img, x, drawStart, 10, drawEnd - drawStart,
-          i + x - start, 0, 10, 256);*/
+      }
       for (var x = start; x < end; x++) {
-        /*for (var y = 0; y < lineHeight; y++) {
-          
-          var texY = Math.floor(texPos) & (TEX_HEIGHT - 1);
-          texPos += step;
-          var color = texture[TEX_HEIGHT * texY + texX];
-          if (player.side == 1)
-            color = (color >> 1) & 8355711;
-          red = color >> 16;
-          green = color >> 8 & 255;
-          blue = color & 255;
-          //pixelColor.setRed(red);
-          //pixelColor.setGreen(green);
-          //pixelColor.setBlue(blue);
-          let colorVal = sketch.color(red, green, blue);
-          sketch.set(x, y, colorVal);
-          
-        }*/
-        
-        /*if (i % 2 == 0) {
-          sketch.stroke(255, 0 ,0);
-        } else {
-          sketch.stroke(255, 255 , 255);
-        }
-        sketch.line(x, drawStart, x, drawEnd);*/
-        /*sketch.image(img, (i + 0.5) * 4 + WINDOW_WIDTH, drawStart, 4, drawEnd - drawStart, WINDOW_HEIGHT / rays[i].distance, 
-        Math.floor(sampleX * img.width), 0, 1, img.height);*/
         var sx = i;
         if (sx > img.width) {
           sx -= img.width
         }
-        sketch.image(img, x, drawStart, 1, drawEnd - drawStart,
+        sketch.image(img, x, drawStart-TILE_SIZE, 1, drawEnd - drawStart + TILE_SIZE,
           Math.floor(sampleX * img.width), 0, img.width / NUM_RAYS, img.height);
-        //console.log(NUM_RAYS);
-        /*if (i % 2 == 0) {
-          sketch.stroke(255, 255, 255);
-          sketch.line(x, drawStart, x, drawEnd / 2 - 1);
-          sketch.stroke(0, 0, 0);
-          sketch.line(x, drawEnd / 2, x, drawEnd);
-        } else {
-          sketch.stroke(0, 0, 0);
-          sketch.line(x, drawStart, x, drawEnd / 2 - 1);
-          sketch.stroke(255, 255, 255);
-          sketch.line(x, drawEnd / 2, x, drawEnd);
-        }*/
-        
-      }
-      //sketch.stroke(0);
-      /*sketch.rect((i*4) + WINDOW_WIDTH, (drawStart-TILE_SIZE), 0, (drawEnd-drawStart)+TILE_SIZE);
-      sketch.stroke(0);
-      sketch.rect((i*4) + WINDOW_WIDTH, 0, 0, (drawStart));
-      //sketch.stroke(172);
-      sketch.rect((i*4) + WINDOW_WIDTH, (drawEnd), 0, WINDOW_HEIGHT);
-      sketch.strokeWeight(2);*/
-    
-    }
-    //sketch.updatePixels();
-    /*var color = new p5.Color();
-    console.log("Here right now");
-    for (var y = 0; y < WINDOW_HEIGHT; y++) {
-      for (var x = 0; x < WINDOW_WIDTH; x++) {
-        var red = buffer[y][x] >> 16;
-        var green = buffer[y][x] >> 8 & 255;
-        var blue = buffer[y][x] & 255;
-        
-        color.setRed(red);
-        color.setGreen(green);
-        color.setBlue(blue);
-        set(x, y, color);
       }
     }
-    updatePixels();
-    console.log("Done!");*/
-    //sketch.image(tex, 10, 10);
-    //sketch.loadPixels();
-    //sketch.updatePixels();
-    /*var unusedRays = NUM_RAYS - slider2.value();
-    var startVal = WINDOW_WIDTH + slider2.value()*4 - 2;
-    //sketch.rect(slider2.value() * 4 + WINDOW_WIDTH, WINDOW_HEIGHT, unusedRays * WINDOW_WIDTH / NUM_RAYS, WINDOW_HEIGHT);
-    console.log(WINDOW_HEIGHT);
-    sketch.noStroke();
-    sketch.fill(0, 0, 0);
-    sketch.rect(startVal, 0, unusedRays*4, WINDOW_HEIGHT);
-    sketch.describe('white rect with black outline in mid-right of canvas');*/
   }
 
   window.addEventListener("keydown", function(e) {
