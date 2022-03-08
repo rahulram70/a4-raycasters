@@ -462,16 +462,17 @@ const raycast_textures = ( sketch ) => {
         texX = TEX_WIDTH - texX - 1;
 
       var start = WINDOW_WIDTH + i*4;
+      console.log("start: " + start);
       
       var end = start + 4;
       var red;
       var green;
       var blue;
     
-      sketch.stroke(0);
-      sketch.rect((i*4) + WINDOW_WIDTH, (drawStart-TILE_SIZE), 0, (drawEnd-drawStart)+TILE_SIZE);
-      sketch.stroke(0);
-      sketch.strokeWeight(2);
+      sketch.stroke(255, 255, 0);
+      //sketch.rect((i*4) + WINDOW_WIDTH, (drawStart-TILE_SIZE), 0, (drawEnd-drawStart)+TILE_SIZE);
+      //sketch.stroke(0);
+      //sketch.strokeWeight(2);
       var hitX =  rays[i].wallHitX / TILE_SIZE;
       var hitY =  rays[i].wallHitY / TILE_SIZE;
       sampleX = Math.abs(hitX - Math.floor(hitX));
