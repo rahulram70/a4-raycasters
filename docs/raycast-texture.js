@@ -274,13 +274,13 @@ const raycast_textures = ( sketch ) => {
 
   sketch.keyPressed = () => {
     if (sketch.keyCode == sketch.UP_ARROW) {
-      player.walkDirection = 0.5
+      player.walkDirection = 1
     } else if (sketch.keyCode == sketch.DOWN_ARROW) {
-      player.walkDirection = -0.5;
+      player.walkDirection = -1;
     } else if (sketch.keyCode == sketch.RIGHT_ARROW) {
-      player.turnDirection = 0.5;
+      player.turnDirection = 1;
     } else if (sketch.keyCode == sketch.LEFT_ARROW) {
-      player.turnDirection = -0.5;
+      player.turnDirection = -1;
     }
   }
 
@@ -528,17 +528,21 @@ const raycast_textures = ( sketch ) => {
           
         }*/
         
-        if (i % 2 == 0) {
+        /*if (i % 2 == 0) {
           sketch.stroke(255, 0 ,0);
         } else {
           sketch.stroke(255, 255 , 255);
         }
-        sketch.line(x, drawStart, x, drawEnd);
+        sketch.line(x, drawStart, x, drawEnd);*/
         /*sketch.image(img, (i + 0.5) * 4 + WINDOW_WIDTH, drawStart, 4, drawEnd - drawStart, WINDOW_HEIGHT / rays[i].distance, 
         Math.floor(sampleX * img.width), 0, 1, img.height);*/
-        /*sketch.image(img, x, drawStart, 1, drawEnd - drawStart,
-          i + x - start, 0, img.width / NUM_RAYS, img.height);*/
-
+        var sx = i;
+        if (sx > img.width) {
+          sx -= img.width
+        }
+        sketch.image(img, x, drawStart, 1, drawEnd - drawStart,
+          Math.floor(sampleX * img.width), 0, img.width / NUM_RAYS, img.height);
+        //console.log(NUM_RAYS);
         /*if (i % 2 == 0) {
           sketch.stroke(255, 255, 255);
           sketch.line(x, drawStart, x, drawEnd / 2 - 1);
