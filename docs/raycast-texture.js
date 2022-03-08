@@ -500,13 +500,13 @@ const raycast_textures = ( sketch ) => {
       var blue;
       
       //var pixelColor = new p5.Color()
-      sketch.stroke(0);
+      /*sketch.stroke(0);
       sketch.rect((i*4) + WINDOW_WIDTH, (drawStart-TILE_SIZE), 0, (drawEnd-drawStart)+TILE_SIZE);
       sketch.stroke(0);
       sketch.rect((i*4) + WINDOW_WIDTH, 0, 0, (drawStart));
       //sketch.stroke(172);
       sketch.rect((i*4) + WINDOW_WIDTH, (drawEnd), 0, WINDOW_HEIGHT);
-      sketch.strokeWeight(2);
+      sketch.strokeWeight(2);*/
       var hitX =  rays[i].wallHitX / TILE_SIZE;
       var hitY =  rays[i].wallHitY / TILE_SIZE;
       sampleX = Math.abs(hitX - Math.floor(hitX));

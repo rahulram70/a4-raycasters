@@ -364,7 +364,8 @@ const raycast_textures = ( sketch ) => {
   let img;
   let bg;
   sketch.preload = () => {
-    img = sketch.loadImage("texture.png");
+    //img = sketch.loadImage("texture.png");
+    img = sketch.loadImage("redbrick.png");
     bg = sketch.loadImage("image.jpg", goodLoad, badLoad);
   }
   //let slider2;
@@ -462,7 +463,7 @@ const raycast_textures = ( sketch ) => {
         texX = TEX_WIDTH - texX - 1;
 
       var start = WINDOW_WIDTH + i*4;
-      console.log("start: " + start);
+      //console.log("start: " + start);
       
       var end = start + 4;
       var red;
@@ -486,8 +487,17 @@ const raycast_textures = ( sketch ) => {
           sx -= img.width
         }
         //sketch.tint(rays[i].color);
-        sketch.image(img, x, drawStart-TILE_SIZE, 1, drawEnd - drawStart + TILE_SIZE,
-          Math.floor(sampleX * img.width), 0, img.width / NUM_RAYS, img.height);
+        if (rays[i].distance / TILE_SIZE > 1) {
+          sketch.image(img, x, drawStart-TILE_SIZE, 1, drawEnd - drawStart + TILE_SIZE,
+            Math.floor(sampleX * img.width), 0, img.width / NUM_RAYS, img.height);
+        } else {
+          var sx = x - WINDOW_WIDTH;
+          if (sx > img.width) {
+            sx -= img.width;
+          }
+          sketch.image(img, x, drawStart-TILE_SIZE, 1, drawEnd - drawStart + TILE_SIZE,
+            sx, 0, img.width / NUM_RAYS, img.height);
+        }
         if (rays[i].color == 160) {
           
           sketch.stroke(0, 0, 0, 50);
