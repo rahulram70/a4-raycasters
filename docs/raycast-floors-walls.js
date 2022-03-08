@@ -334,6 +334,7 @@ const raycast_textures = ( sketch ) => {
   }
 
   function isColliding() {
+    console.log(grid.grid);
     var posX = player.x;
     var posY = player.y;
 
