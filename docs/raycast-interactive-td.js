@@ -434,8 +434,11 @@ const raycast_textures = ( sketch ) => {
         var lineHeight = 32*(WINDOW_HEIGHT / 2) / rays[i].distance;
 
         var drawStart = Math.floor(-lineHeight / 2) + Math.floor((WINDOW_HEIGHT / 2) / 2);
+        var actualDrawStart = (drawStart-TILE_SIZE) + WINDOW_HEIGHT; 
         if (drawStart < 0)
-          drawStart = 0;
+            drawStart = TILE_SIZE;
+        /*if (actualDrawStart < WINDOW_HEIGHT)
+          actualDrawStart = WINDOW_HEIGHT;*/
         var drawEnd   = Math.floor(lineHeight / 2) + Math.floor(WINDOW_HEIGHT / (2*2));
         if (drawEnd >= WINDOW_HEIGHT / 2)
           drawEnd = WINDOW_HEIGHT / 2 - 1;
@@ -443,34 +446,37 @@ const raycast_textures = ( sketch ) => {
 
 
         // where 3d stuff is being rendered
-
-        
-        //sketch.rect((i*4) + WINDOW_WIDTH, (drawStart-TILE_SIZE), 0, (drawEnd-drawStart)+TILE_SIZE);
-        //sketch.stroke(0);
-        //sketch.strokeWeight(2);
-        var transparencyAlpha = 1;
+        var darknessCoefficient = 1;
         if (rays[i].color == 160) {
-            transparencyAlpha = 0.5;
+            darknessCoefficient = 0.5;
         }
         
         var blockColor = sketch.color(255, 255, 255);
         var hitTileX = Math.floor(rays[i].wallHitX / TILE_SIZE);
         var hitTileY = Math.floor(rays[i].wallHitY / TILE_SIZE);
         if (grid.grid[hitTileY][hitTileX] == 1) {
-            blockColor = sketch.color(0,255 * transparencyAlpha,0);
+            blockColor = sketch.color(0,255 * darknessCoefficient,0);
         } else if (grid.grid[hitTileY][hitTileX] == 2) {
-            blockColor = sketch.color(255 * transparencyAlpha, 0, 0);
+            blockColor = sketch.color(255 * darknessCoefficient, 0, 0);
         } else if (grid.grid[hitTileY][hitTileX] == 3) {
-            blockColor = sketch.color(0, 0, 255*transparencyAlpha);
+            blockColor = sketch.color(0, 0, 255*darknessCoefficient);
         } else {
-            blockColor = sketch.color(255*transparencyAlpha, 255*transparencyAlpha, 0);
+            blockColor = sketch.color(255*darknessCoefficient, 255*darknessCoefficient, 0);
         }
-         
+
+        /*if (actualDrawStart < WINDOW_HEIGHT) {
+            console.log("draw start: " + actualDrawStart);
+        }*/
+        //console.log("Window Height: " + screen.height);
         sketch.noStroke();
         sketch.stroke(blockColor);
         sketch.strokeWeight(4);
         sketch.fill(255, 0 , 0);
-        sketch.rect((i*4), (drawStart-TILE_SIZE) + WINDOW_HEIGHT, 0, (drawEnd-drawStart)+TILE_SIZE);
+        var test = (drawStart-TILE_SIZE) + WINDOW_HEIGHT;
+        if (test < WINDOW_HEIGHT) {
+            test = WINDOW_HEIGHT;
+        }
+        sketch.rect((i*4), test, 0, (drawEnd-drawStart)+TILE_SIZE);
         sketch.stroke(0);
         sketch.rect((i*4), WINDOW_HEIGHT, 0, (drawStart));
         // sketch.stroke(255);
