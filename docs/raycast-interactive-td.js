@@ -409,8 +409,12 @@ const raycast_textures = ( sketch ) => {
     sketch.mousePressed = () => {
       var tileX = Math.floor(sketch.mouseX / TILE_SIZE);
       var tileY = Math.floor(sketch.mouseY / TILE_SIZE);
+      var posTileX = Math.floor(player.x / TILE_SIZE);
+      var posTileY = Math.floor(player.y / TILE_SIZE);
+      var sameTile = posTileX == tileX && posTileY == tileY;
       if (tileX >= 1 && tileX < (MAP_NUM_COLS - 1) 
-          && tileY >= 1 && tileY < (MAP_NUM_ROWS - 1)) {
+          && tileY >= 1 && tileY < (MAP_NUM_ROWS - 1)
+          && !sameTile) {
         
         if (grid.grid[tileY][tileX] == 1) {
             grid.grid[tileY][tileX] = 0;
@@ -419,7 +423,6 @@ const raycast_textures = ( sketch ) => {
         }
 
       }
-      console.log(tileX + " " + tileY + " " + grid.grid[tileX][tileY]);
       grid.render();
     }
 
