@@ -409,7 +409,7 @@ const raycast_textures = ( sketch ) => {
           && tileY >= 1 && tileY < (MAP_NUM_ROWS - 1)
           && !sameTile) {
         
-        if (grid.grid[tileY][tileX] == 4) {
+        if (grid.grid[tileY][tileX] >= 1) {
             grid.grid[tileY][tileX] = 0;
         } else {
             grid.grid[tileY][tileX] = 4;
