@@ -2,7 +2,7 @@ const raycast_textures = ( sketch ) => {
 
     const TILE_SIZE = 36;
     const MAP_NUM_ROWS = 11;
-    const MAP_NUM_COLS = 15;
+    const MAP_NUM_COLS = 23;
 
     const WINDOW_WIDTH = MAP_NUM_COLS * TILE_SIZE;
     const WINDOW_HEIGHT = MAP_NUM_ROWS * TILE_SIZE;
@@ -10,8 +10,8 @@ const raycast_textures = ( sketch ) => {
     const TEX_WIDTH = 64;
     const TEX_HEIGHT = 64;
 
-    let magicWallX = null; // noclip grid position X
-    let magicWallY = null; // noclip grid position Y
+    let magicWallCol = null; // noclip grid position X
+    let magicWallRow = null; // noclip grid position Y
 
     //console.log("raywidth: " + RAYWIDTH);
 
@@ -28,19 +28,19 @@ const raycast_textures = ( sketch ) => {
     class Map {
       constructor() {
         this.grid = [
-          [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-          [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+          [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],  // 0
+          [1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 2, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1],  // 1
+          [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],  // 2
+          [1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],  // 3
+          [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1],  // 4
+          [1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1],  // 5
+          [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1],  // 6
+          [1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1],  // 7
+          [1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],  // 8
+          [1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],  // 9
+          [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]   // 10
         ];
-      }
+      } // 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22
 
       // a very userful function for checking if there is a wall at a point
       hasWallAt(x, y) {
@@ -57,10 +57,10 @@ const raycast_textures = ( sketch ) => {
           // paint magicwall's grid loc and store it's position into variables
           if (this.grid[i][j] == 2) {
             tileColor = "green";
-            magicWallX = (this.grid.findIndex(arr => arr.includes(2)));
-            magicWallY = (this.grid[magicWallX].indexOf(2));
-            // console.log("magic wall row:", magicWallY,
-            //             "magic wall col:", magicWallX);
+            magicWallRow = (this.grid.findIndex(arr => arr.includes(2)));
+            magicWallCol = (this.grid[magicWallRow].indexOf(2));
+            // console.log("magic wall row:", magicWallRow,
+            //             "magic wall col:", magicWallCol);
           };
 
             sketch.fill(tileColor);
@@ -73,8 +73,8 @@ const raycast_textures = ( sketch ) => {
 
     class Player {
       constructor() {
-        this.x = WINDOW_WIDTH / 2;
-        this.y = WINDOW_HEIGHT / 2;
+        this.x = WINDOW_WIDTH / 16;
+        this.y = WINDOW_HEIGHT / 8;
         this.radius = 3;
         this.turnDirection = 0;
         this.walkDirection = 0;
@@ -85,6 +85,21 @@ const raycast_textures = ( sketch ) => {
 
       update() {
         this.rotationAngle += this.turnDirection * this.rotationSpeed;
+
+        // console.log(parseInt(player.x / TILE_SIZE))
+        // console.log(magicWallCol)
+        // console.log(parseInt(player.y / TILE_SIZE))
+        // console.log(magicWallRow)
+
+        if (parseInt(player.x / TILE_SIZE) == magicWallCol && (parseInt(player.y / TILE_SIZE)) == magicWallRow) {
+          console.log("YOU WIN!");
+
+          // player.walkDirection = -1; // send backwards
+          // player.moveSpeed = 5; // double speed
+          // this.x = WINDOW_WIDTH / 16; // teleport to start of level
+          // this.y = WINDOW_HEIGHT / 8; // teleport to start of level
+
+        }
 
         if (!isColliding()) {
           // only do that if the player is not colliding
@@ -358,7 +373,8 @@ const raycast_textures = ( sketch ) => {
       posX += Math.cos(player.rotationAngle) * moveStep;
       posY += Math.sin(player.rotationAngle) * moveStep;
 
-      if (Math.floor(posX / TILE_SIZE) == magicWallX && (Math.floor(posY / TILE_SIZE)) == magicWallY) {
+      if (parseInt(posX / TILE_SIZE) == magicWallCol && (parseInt(posY / TILE_SIZE)) == magicWallRow) {
+        // youWin();
         return false;
       }
       //}
@@ -406,7 +422,12 @@ const raycast_textures = ( sketch ) => {
     }
 
 
-
+    function youWin() {
+      console.log("hi");
+      sketch.stroke(255, 0, 0);
+      sketch.fill(255, 0, 0);
+      sketch.rect(30, 20, 55, 55);
+    }
 
     sketch.draw = () => {
       update();
