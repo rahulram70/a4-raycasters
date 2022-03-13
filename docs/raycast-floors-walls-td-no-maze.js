@@ -29,14 +29,14 @@ const raycast_textures = ( sketch ) => {
       constructor() {
         this.grid = [
           [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
           [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
           [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 1],
+          [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1],
           [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1],
-          [1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1],
-          [1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1],
           [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
           [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         ];
@@ -48,14 +48,20 @@ const raycast_textures = ( sketch ) => {
       }
 
       render() {
-        //console.log("test tile 1 1: " + this.grid[1][1]);
         for (var i = 0; i < MAP_NUM_ROWS; i++) {
           for (var j = 0; j < MAP_NUM_COLS; j++) {
             let tileX = j * TILE_SIZE;
             let tileY = i * TILE_SIZE;
-            let tileColor = this.grid[i][j] >= 1 ? "#222" : "#fff";
+            let tileColor = this.grid[i][j] == 1 ? "#222" : "#fff";
 
           // paint magicwall's grid loc and store it's position into variables
+          if (this.grid[i][j] == 2) {
+            tileColor = "green";
+            magicWallX = (this.grid.findIndex(arr => arr.includes(2)));
+            magicWallY = (this.grid[magicWallX].indexOf(2));
+            // console.log("magic wall row:", magicWallY,
+            //             "magic wall col:", magicWallX);
+          };
 
             sketch.fill(tileColor);
             sketch.stroke("#222");
@@ -399,29 +405,12 @@ const raycast_textures = ( sketch ) => {
       player.update();
     }
 
-    sketch.mousePressed = () => {
-      var tileX = Math.floor(sketch.mouseX / TILE_SIZE);
-      var tileY = Math.floor(sketch.mouseY / TILE_SIZE);
-      var posTileX = Math.floor(player.x / TILE_SIZE);
-      var posTileY = Math.floor(player.y / TILE_SIZE);
-      var sameTile = posTileX == tileX && posTileY == tileY;
-      if (tileX >= 1 && tileX < (MAP_NUM_COLS - 1) 
-          && tileY >= 1 && tileY < (MAP_NUM_ROWS - 1)
-          && !sameTile) {
-        
-        if (grid.grid[tileY][tileX] >= 1) {
-            grid.grid[tileY][tileX] = 0;
-        } else {
-            grid.grid[tileY][tileX] = 4;
-        }
 
-      }
-      grid.render();
-    }
+
 
     sketch.draw = () => {
       update();
-      //sketch.background(bg);
+      sketch.background(bg);
       grid.render();
       castAllRays(NUM_RAYS);
 
@@ -434,11 +423,8 @@ const raycast_textures = ( sketch ) => {
         var lineHeight = 32*(WINDOW_HEIGHT / 2) / rays[i].distance;
 
         var drawStart = Math.floor(-lineHeight / 2) + Math.floor((WINDOW_HEIGHT / 2) / 2);
-        //var actualDrawStart = (drawStart-TILE_SIZE) + WINDOW_HEIGHT; 
         if (drawStart < 0)
-            drawStart = TILE_SIZE;
-        /*if (actualDrawStart < WINDOW_HEIGHT)
-          actualDrawStart = WINDOW_HEIGHT;*/
+          drawStart = 0;
         var drawEnd   = Math.floor(lineHeight / 2) + Math.floor(WINDOW_HEIGHT / (2*2));
         if (drawEnd >= WINDOW_HEIGHT / 2)
           drawEnd = WINDOW_HEIGHT / 2 - 1;
@@ -446,38 +432,79 @@ const raycast_textures = ( sketch ) => {
 
 
         // where 3d stuff is being rendered
-        var darknessCoefficient = 1;
-        if (rays[i].color == 160) {
-            darknessCoefficient = 0.5;
-        }
-        
-        var blockColor = sketch.color(255, 255, 255);
-        var hitTileX = Math.floor(rays[i].wallHitX / TILE_SIZE);
-        var hitTileY = Math.floor(rays[i].wallHitY / TILE_SIZE);
-        if (grid.grid[hitTileY][hitTileX] == 1) {
-            blockColor = sketch.color(0,255 * darknessCoefficient,0);
-        } else if (grid.grid[hitTileY][hitTileX] == 2) {
-            blockColor = sketch.color(255 * darknessCoefficient, 0, 0);
-        } else if (grid.grid[hitTileY][hitTileX] == 3) {
-            blockColor = sketch.color(0, 0, 255*darknessCoefficient);
-        } else {
-            blockColor = sketch.color(255*darknessCoefficient, 255*darknessCoefficient, 0);
+        sketch.noStroke();
+        sketch.stroke(rays[i].color);
+        sketch.strokeWeight(4);
+        sketch.fill(255, 0, 0);
+        let sampleX = Math.abs(rays[i].wallHitX - Math.floor(rays[i].wallHitX));
+        if (sampleX < 0.001 || sampleX > 0.999) {
+          sampleX = Math.abs(rays[i].wallHitY - Math.floor(rays[i].wallHitY));
         }
 
-        sketch.noStroke();
-        sketch.stroke(blockColor);
-        sketch.strokeWeight(4);
-        sketch.fill(255, 0 , 0);
-        var test = (drawStart-TILE_SIZE) + WINDOW_HEIGHT;
-        if (test < WINDOW_HEIGHT) {
-            test = WINDOW_HEIGHT;
+        var wallX;
+        var rayDirX = Math.cos(rays[i].rayAngle);
+        var rayDirY = Math.sin(rays[i].rayAngle);
+        var step = 1.0 * TEX_HEIGHT / lineHeight;
+        var texPos = (drawStart - Math.floor(WINDOW_HEIGHT / 4) + Math.floor(lineHeight / 2)) * step;
+
+        if (player.side == 0) {
+          wallX = player.y / TILE_SIZE + rays[i].distance / TILE_SIZE * rayDirY;
+        } else {
+          wallX = player.x / TILE_SIZE + rays[i].distance / TILE_SIZE * rayDirX;
         }
-        sketch.rect((i*4), test, 0, (drawEnd-drawStart)+TILE_SIZE);
-        sketch.stroke(0);
-        sketch.rect((i*4), WINDOW_HEIGHT, 0, (drawStart));
-        // sketch.stroke(255);
-        sketch.rect((i*4), (drawEnd)+WINDOW_HEIGHT, 0, WINDOW_HEIGHT);
-        sketch.strokeWeight(2);
+        wallX -= Math.floor(wallX);
+        var texX = Math.floor(wallX * TEX_WIDTH);
+        if (player.side == 0 && rayDirX > 0)
+          texX = TEX_WIDTH - texX - 1;
+        if (player.side == 1 && rayDirY < 0)
+          texX = TEX_WIDTH - texX - 1;
+
+        var start = i*4;
+        //console.log("start: " + start);
+
+        var end = start + 4;
+        var red;
+        var green;
+        var blue;
+
+        sketch.stroke(255, 255, 0);
+        //sketch.rect((i*4) + WINDOW_WIDTH, (drawStart-TILE_SIZE), 0, (drawEnd-drawStart)+TILE_SIZE);
+        //sketch.stroke(0);
+        //sketch.strokeWeight(2);
+        var hitX =  rays[i].wallHitX / TILE_SIZE;
+        var hitY =  rays[i].wallHitY / TILE_SIZE;
+        sampleX = Math.abs(hitX - Math.floor(hitX));
+        if (sampleX < 0.001 || sampleX > 0.999) {
+          sampleX = Math.abs(hitY - Math.floor(hitY));
+        }
+        var test = drawStart-TILE_SIZE + WINDOW_HEIGHT;
+        //if (test < WINDOW_HEIGHT) 
+        //  test = WINDOW_HEIGHT;
+        //sketch.tint(rays[i].color);
+        for (var x = start; x < end; x++) {
+          var sx = i;
+          if (sx > img.width) {
+            sx -= img.width
+          }
+          //sketch.tint(rays[i].color);
+          if (rays[i].distance / TILE_SIZE > 1) {
+            sketch.image(img, x, test, 1, drawEnd - drawStart + TILE_SIZE,
+              Math.floor(sampleX * img.width), 0, img.width / NUM_RAYS, img.height);
+          } else {
+            var sx = x % img.width;
+            /*if (sx > img.width) {
+              sx -= img.width;
+            }*/
+            sketch.image(img, x, test, 1, drawEnd - drawStart + TILE_SIZE,
+              sx, 0, img.width / NUM_RAYS, img.height);
+          }
+          if (rays[i].color == 160) {
+
+            sketch.stroke(0, 0, 0, 50);
+            sketch.fill(0, 0, 0, 50);
+            sketch.rect(x, test+2, 1, drawEnd - drawStart + TILE_SIZE-2);
+          }
+        }
       }
     }
 
