@@ -514,16 +514,15 @@ const raycast_textures = ( sketch ) => {
           sx -= img.width
         }
         
-        if (rays[i].distance / TILE_SIZE > 1) {
+        if (rays[i].distance / TILE_SIZE > 0.5) {
           sketch.image(img, x, test, 1, drawEnd - drawStart + TILE_SIZE,
             Math.floor(sampleX * img.width), 0, img.width / NUM_RAYS, img.height);
         } else {
           var sx = x % img.width;
           sketch.image(img, x, test, 1, drawEnd - drawStart + TILE_SIZE,
-            sx, 0, img.width / NUM_RAYS, img.height);
+            sx, img.height / 4, img.width / NUM_RAYS, img.height / 2);
         }
         if (rays[i].color == 160) {
-
           sketch.stroke(0, 0, 0, 50);
           sketch.fill(0, 0, 0, 50);
           sketch.rect(x, test+2, 1, drawEnd - drawStart + TILE_SIZE-2);
