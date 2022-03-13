@@ -472,14 +472,22 @@ const raycast_textures = ( sketch ) => {
         if (test < WINDOW_HEIGHT) {
             test = WINDOW_HEIGHT;
         }
+        
+      if (rays[i].distance / TILE_SIZE > 1) {
         sketch.rect((i*4), test, 0, (drawEnd-drawStart)+TILE_SIZE);
         sketch.stroke(0);
         sketch.rect((i*4), WINDOW_HEIGHT, 0, (drawStart));
         // sketch.stroke(255);
         sketch.rect((i*4), (drawEnd)+WINDOW_HEIGHT, 0, WINDOW_HEIGHT);
         sketch.strokeWeight(2);
+      } else {
+        sketch.stroke(blockColor);
+        sketch.strokeWeight(4);
+        sketch.fill(255, 0 , 0);
+        sketch.rect((i*4), test, 0, 0.5*WINDOW_HEIGHT);
       }
     }
+  }
 
     window.addEventListener("keydown", function(e) {
       if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
